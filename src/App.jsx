@@ -8,7 +8,16 @@ function App() {
 
   return (
     <>
-      <div className="container"></div>
+      <div className="container">
+        <div class="player">
+          <div class="player-bar">
+            <div class="parallel-lines">
+              <div></div>
+              <div></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }
