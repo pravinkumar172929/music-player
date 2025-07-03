@@ -80,6 +80,16 @@ function App() {
   const [songs, setSongs] = useState([...initialSongs]);
   const [currentSong, setCurrentSong] = useState(null);
 
+  const playNextSong = () => {
+    if (!currentSong) {
+      return;
+    }
+    const index = songs.findIndex((song) => song.id === currentSong.id);
+    if (index < songs.length - 1) {
+      setCurrentSong(songs[index + 1]);
+    }
+  };
+
   const renderedSongs = songs.map((song) => {
     return (
       <li id="song-${song.id}" className="playlist-song" key={song.id}>
@@ -185,7 +195,14 @@ function App() {
                   <path d="M11.4 0H16.15V19H11.4V0Z" />
                 </svg>
               </button>
-              <button id="next" className="next" aria-label="Next">
+              <button
+                id="next"
+                className="next"
+                aria-label="Next"
+                onClick={() => {
+                  playNextSong();
+                }}
+              >
                 <svg
                   width="24"
                   height="19"
