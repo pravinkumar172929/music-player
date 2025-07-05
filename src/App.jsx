@@ -79,6 +79,16 @@ const initialSongs = [
 function App() {
   const [songs, setSongs] = useState([...initialSongs]);
   const [currentSong, setCurrentSong] = useState(null);
+  const audioRef = useRef(new Audio());
+
+  useEffect(() => {
+    if (!currentSong) {
+      return;
+    }
+    const audio = audioRef.current;
+    audio.src = currentSong.src;
+    audio.play();
+  }, [currentSong]);
 
   const playNextSong = () => {
     if (!currentSong) {
