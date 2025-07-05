@@ -98,6 +98,7 @@ function App() {
     const index = songs.findIndex((song) => song.id === currentSong.id);
     if (index < songs.length - 1) {
       setCurrentSong(songs[index + 1]);
+      setSongTime(0);
     }
   };
 
@@ -108,6 +109,7 @@ function App() {
     const index = songs.findIndex((song) => song.id === currentSong.id);
     if (index > 0) {
       setCurrentSong(songs[index - 1]);
+      setSongTime(0);
     }
   };
 
