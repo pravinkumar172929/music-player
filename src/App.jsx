@@ -80,6 +80,7 @@ function App() {
   const [songs, setSongs] = useState([...initialSongs]);
   const [currentSong, setCurrentSong] = useState(null);
   const audioRef = useRef(new Audio());
+  const [songTime, setSongTime] = useState(0);
 
   useEffect(() => {
     if (!currentSong) {
@@ -108,6 +109,11 @@ function App() {
     if (index > 0) {
       setCurrentSong(songs[index - 1]);
     }
+  };
+
+  const pauseSong = () => {
+    setSongTime(audioRef.current.currentTime);
+    audioRef.current.pause();
   };
 
   const renderedSongs = songs.map((song) => {
@@ -210,7 +216,14 @@ function App() {
                   <path d="M0 0L16.1852 9.5L1.88952e-07 19L0 0Z" />
                 </svg>
               </button>
-              <button id="pause" className="pause" aria-label="Pause">
+              <button
+                id="pause"
+                className="pause"
+                aria-label="Pause"
+                onClick={() => {
+                  pauseSong();
+                }}
+              >
                 <svg
                   width="17"
                   height="19"
