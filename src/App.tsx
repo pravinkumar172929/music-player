@@ -1,7 +1,13 @@
 import { useState, useRef, useEffect } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
+
+type Song = {
+  id: number;
+  title: string;
+  artist: string;
+  duration: string;
+  src: string;
+};
 
 const initialSongs = [
   {
@@ -77,9 +83,9 @@ const initialSongs = [
 ];
 
 function App() {
-  const [songs, setSongs] = useState([...initialSongs]);
-  const [currentSong, setCurrentSong] = useState(null);
-  const audioRef = useRef(new Audio());
+  const [songs, setSongs] = useState<Song[]>([...initialSongs]);
+  const [currentSong, setCurrentSong] = useState<Song | null>(null);
+  const audioRef = useRef<HTMLAudioElement>(new Audio());
   const [songTime, setSongTime] = useState(0);
 
   useEffect(() => {
@@ -119,8 +125,8 @@ function App() {
     audioRef.current.pause();
   };
 
-  const playSong = (song) => {
-    if (currentSong.id === song.id) {
+  const playSong = (song: Song) => {
+    if (currentSong && currentSong.id === song.id) {
       audioRef.current.play();
     } else {
       setCurrentSong(song);
