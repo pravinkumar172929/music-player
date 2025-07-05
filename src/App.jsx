@@ -88,6 +88,7 @@ function App() {
     }
     const audio = audioRef.current;
     audio.src = currentSong.src;
+    audio.currentTime = songTime || 0;
     audio.play();
   }, [currentSong]);
 
@@ -125,6 +126,13 @@ function App() {
       setCurrentSong(song);
       setSongTime(0);
     }
+  };
+
+  const shuffleSongs = () => {
+    const shuffledSongsArr = [...songs].sort(() => Math.random() - 0.5);
+    setSongs(shuffledSongsArr);
+    setCurrentSong(null);
+    setSongTime(0);
   };
 
   const renderedSongs = songs.map((song) => {
@@ -272,7 +280,14 @@ function App() {
                   <rect x="18.5885" width="4.63633" height="18.5453" />
                 </svg>
               </button>
-              <button id="shuffle" className="shuffle" aria-label="Shuffle">
+              <button
+                id="shuffle"
+                className="shuffle"
+                aria-label="Shuffle"
+                onClick={() => {
+                  shuffleSongs();
+                }}
+              >
                 <svg
                   width="17"
                   height="14"
