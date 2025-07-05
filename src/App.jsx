@@ -118,6 +118,15 @@ function App() {
     audioRef.current.pause();
   };
 
+  const playSong = (song) => {
+    if (currentSong.id === song.id) {
+      audioRef.current.play();
+    } else {
+      setCurrentSong(song);
+      setSongTime(0);
+    }
+  };
+
   const renderedSongs = songs.map((song) => {
     return (
       <li id="song-${song.id}" className="playlist-song" key={song.id}>
@@ -206,7 +215,14 @@ function App() {
                   />
                 </svg>
               </button>
-              <button id="play" className="play" aria-label="Play">
+              <button
+                id="play"
+                className="play"
+                aria-label="Play"
+                onClick={() => {
+                  playSong(currentSong || songs[0]);
+                }}
+              >
                 <svg
                   width="17"
                   height="19"
