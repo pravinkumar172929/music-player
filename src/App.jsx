@@ -90,6 +90,16 @@ function App() {
     }
   };
 
+  const playPreviousSong = () => {
+    if (!currentSong) {
+      return;
+    }
+    const index = songs.findIndex((song) => song.id === currentSong.id);
+    if (index > 0) {
+      setCurrentSong(songs[index - 1]);
+    }
+  };
+
   const renderedSongs = songs.map((song) => {
     return (
       <li id="song-${song.id}" className="playlist-song" key={song.id}>
@@ -155,7 +165,14 @@ function App() {
               <p id="player-song-artist"></p>
             </div>
             <div className="player-buttons">
-              <button id="previous" className="previous" aria-label="Previous">
+              <button
+                id="previous"
+                className="previous"
+                aria-label="Previous"
+                onClick={() => {
+                  playPreviousSong();
+                }}
+              >
                 <svg
                   width="24"
                   height="19"
