@@ -143,7 +143,7 @@ function App() {
 
   const renderedSongs = songs.map((song) => {
     return (
-      <li id="song-${song.id}" className="playlist-song" key={song.id}>
+      <li id={`song-${song.id}`} className="playlist-song" key={song.id}>
         <button
           className="playlist-song-info"
           onClick={() => {
