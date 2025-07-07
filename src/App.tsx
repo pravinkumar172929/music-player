@@ -150,7 +150,7 @@ function App() {
     setSongs((prevSongs) => prevSongs.filter((song) => song.id !== id));
   };
 
-  const renderedSongs = songs.map((song) => {
+  const renderSongs = songs.map((song) => {
     return (
       <li id={`song-${song.id}`} className="playlist-song" key={song.id}>
         <button
@@ -338,7 +338,7 @@ function App() {
             <div></div>
           </div>
         </div>
-        <ul id="playlist-songs">{renderedSongs}</ul>
+        <ul id="playlist-songs">{renderSongs}</ul>
       </div>
     </div>
   );
