@@ -104,9 +104,6 @@ function App() {
     audio.addEventListener("loadedmetadata", updateDuration);
   }, []);
 
-  console.log(currentTime);
-  console.log(songDuration);
-
   useEffect(() => {
     if (!currentSong) {
       return;
@@ -161,6 +158,19 @@ function App() {
     }
     setSongs((prevSongs) => prevSongs.filter((song) => song.id !== id));
   };
+
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    const paddeledSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+    return `${minutes}:${paddeledSeconds}`;
+  };
+
+  const remainingTime =
+    currentTime && songDuration
+      ? formatTime(songDuration - currentTime)
+      : "0:00";
+  console.log("remainingTime", remainingTime);
 
   const renderSongs = songs.map((song) => {
     return (
@@ -226,6 +236,7 @@ function App() {
           <div className="player-display">
             <div className="player-display-song-artist">
               <h1>{currentSong ? currentSong.title : "No song playing"}</h1>
+              <h2>{remainingTime}</h2>
               <p id="player-song-title"></p>
               <p id="player-song-artist"></p>
             </div>
