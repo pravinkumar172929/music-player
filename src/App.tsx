@@ -141,6 +141,15 @@ function App() {
     setSongTime(0);
   };
 
+  const deleteSong = (id: number) => {
+    if (currentSong?.id === id) {
+      setCurrentSong(null);
+      setSongTime(0);
+      audioRef.current.pause();
+    }
+    setSongs((prevSongs) => prevSongs.filter((song) => song.id !== id));
+  };
+
   const renderedSongs = songs.map((song) => {
     return (
       <li id={`song-${song.id}`} className="playlist-song" key={song.id}>
@@ -157,6 +166,9 @@ function App() {
         <button
           className="playlist-song-delete"
           aria-label="Delete ${song.title}"
+          onClick={() => {
+            deleteSong(song.id);
+          }}
         >
           <svg
             width="20"
