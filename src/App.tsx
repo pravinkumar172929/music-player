@@ -86,7 +86,26 @@ function App() {
   const [songs, setSongs] = useState<Song[]>([...initialSongs]);
   const [currentSong, setCurrentSong] = useState<Song | null>(null);
   const audioRef = useRef<HTMLAudioElement>(new Audio());
-  const [songTime, setSongTime] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [songDuration, setSongDuration] = useState(0);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+
+    const updateTime = () => {
+      setCurrentTime(audio.currentTime);
+    };
+
+    const updateDuration = () => {
+      setSongDuration(audio.duration);
+    };
+
+    audio.addEventListener("timeupdate", updateTime);
+    audio.addEventListener("loadedmetadata", updateDuration);
+  }, []);
+
+  console.log(currentTime);
+  console.log(songDuration);
 
   useEffect(() => {
     if (!currentSong) {
@@ -94,7 +113,6 @@ function App() {
     }
     const audio = audioRef.current;
     audio.src = currentSong.src;
-    audio.currentTime = songTime || 0;
     audio.play();
   }, [currentSong]);
 
@@ -105,7 +123,6 @@ function App() {
     const index = songs.findIndex((song) => song.id === currentSong.id);
     if (index < songs.length - 1) {
       setCurrentSong(songs[index + 1]);
-      setSongTime(0);
     }
   };
 
@@ -116,12 +133,10 @@ function App() {
     const index = songs.findIndex((song) => song.id === currentSong.id);
     if (index > 0) {
       setCurrentSong(songs[index - 1]);
-      setSongTime(0);
     }
   };
 
   const pauseSong = () => {
-    setSongTime(audioRef.current.currentTime);
     audioRef.current.pause();
   };
 
@@ -130,7 +145,6 @@ function App() {
       audioRef.current.play();
     } else {
       setCurrentSong(song);
-      setSongTime(0);
     }
   };
 
@@ -138,13 +152,11 @@ function App() {
     const shuffledSongsArr = [...songs].sort(() => Math.random() - 0.5);
     setSongs(shuffledSongsArr);
     setCurrentSong(null);
-    setSongTime(0);
   };
 
   const deleteSong = (id: number) => {
     if (currentSong?.id === id) {
       setCurrentSong(null);
-      setSongTime(0);
       audioRef.current.pause();
     }
     setSongs((prevSongs) => prevSongs.filter((song) => song.id !== id));
