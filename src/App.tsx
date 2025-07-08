@@ -88,6 +88,7 @@ function App() {
   const audioRef = useRef<HTMLAudioElement>(new Audio());
   const [currentTime, setCurrentTime] = useState(0);
   const [songDuration, setSongDuration] = useState(0);
+  const [showPlayButton, setShowPlayButton] = useState(true);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -111,6 +112,7 @@ function App() {
     const audio = audioRef.current;
     audio.src = currentSong.src;
     audio.play();
+    setShowPlayButton(false);
   }, [currentSong]);
 
   const playNextSong = () => {
@@ -133,15 +135,17 @@ function App() {
     }
   };
 
-  const pauseSong = () => {
-    audioRef.current.pause();
-  };
-
-  const playSong = (song: Song) => {
-    if (currentSong && currentSong.id === song.id) {
-      audioRef.current.play();
+  const togglePlayPause = () => {
+    if (!currentSong) {
+      setCurrentSong(songs[0]);
+    }
+    const audio = audioRef.current;
+    if (audio.paused) {
+      audio.play();
+      setShowPlayButton(false);
     } else {
-      setCurrentSong(song);
+      audio.pause();
+      setShowPlayButton(true);
     }
   };
 
@@ -170,7 +174,6 @@ function App() {
     currentTime && songDuration
       ? formatTime(songDuration - currentTime)
       : "0:00";
-  console.log("remainingTime", remainingTime);
 
   const renderSongs = songs.map((song) => {
     return (
@@ -264,44 +267,40 @@ function App() {
                   />
                 </svg>
               </button>
+
               <button
-                id="play"
-                className="play"
-                aria-label="Play"
+                id={showPlayButton ? `play` : `pause`}
+                className={showPlayButton ? `play` : `pause`}
+                aria-label={showPlayButton ? `play` : `pause`}
                 onClick={() => {
-                  playSong(currentSong || songs[0]);
+                  togglePlayPause();
                 }}
               >
-                <svg
-                  width="17"
-                  height="19"
-                  viewBox="0 0 17 19"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  {" "}
-                  <path d="M0 0L16.1852 9.5L1.88952e-07 19L0 0Z" />
-                </svg>
+                {showPlayButton ? (
+                  <svg
+                    width="17"
+                    height="19"
+                    viewBox="0 0 17 19"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    {" "}
+                    <path d="M0 0L16.1852 9.5L1.88952e-07 19L0 0Z" />
+                  </svg>
+                ) : (
+                  <svg
+                    width="17"
+                    height="19"
+                    viewBox="0 0 17 19"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M0 6.54013e-07H4.75V19H0V6.54013e-07Z" />{" "}
+                    <path d="M11.4 0H16.15V19H11.4V0Z" />
+                  </svg>
+                )}
               </button>
-              <button
-                id="pause"
-                className="pause"
-                aria-label="Pause"
-                onClick={() => {
-                  pauseSong();
-                }}
-              >
-                <svg
-                  width="17"
-                  height="19"
-                  viewBox="0 0 17 19"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M0 6.54013e-07H4.75V19H0V6.54013e-07Z" />{" "}
-                  <path d="M11.4 0H16.15V19H11.4V0Z" />
-                </svg>
-              </button>
+
               <button
                 id="next"
                 className="next"
